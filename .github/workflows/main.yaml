@@ -5,7 +5,7 @@ jobs:
     name: Test dependencies for security flaws
     steps:
       - uses: actions/checkout@v2
-      - name:
+      - name: It is SCA
         run: pip3 install safety && safety check
         shell: bash
   code_analysis:
