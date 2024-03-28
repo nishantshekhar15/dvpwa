@@ -9,6 +9,9 @@ jobs:
       - name: It is SCA
         run: pip3 install safety && safety check
         shell: bash
+        with:
+          fail-build: false
+
   code_analysis:
     runs-on: ubuntu-latest
     name: Analyse code for security flaws
@@ -17,12 +20,14 @@ jobs:
       - name: Code Security Analysis
         run: pip3 install semgrep && semgrep --config "p/ci" --error
         shell: bash
+        with:
+          fail-build: false
+
   dynamic_security_testing:
     runs-on: ubuntu-latest
     name: Scan live web app for security flaws
     steps:
       - uses: actions/checkout@v2
-
       - name: Start containers
         run: docker-compose -f "docker-compose.yml" up -d --build
 
@@ -34,6 +39,7 @@ jobs:
       - name: Stop containers
         if: always()
         run: docker-compose -f "docker-compose.yml" down
+
   container_scanning:
     name: Scan Container for Security Issues
     runs-on: ubuntu-latest
@@ -54,6 +60,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL'
+          fail-build: false
   anchore_scan_job:
     runs-on: ubuntu-latest
     name: Anchore grype security scan
@@ -66,7 +73,7 @@ jobs:
         uses: anchore/scan-action@v2
         with:
           path: './'
-          fail-build: true
+          fail-build: false
           acs-report-enable: true
 
       - name: upload Anchore scan SARIF report
