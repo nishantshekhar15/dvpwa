@@ -1,4 +1,5 @@
 on: [push]
+
 jobs:
   dependency_analysis:
     runs-on: ubuntu-latest
@@ -16,7 +17,7 @@ jobs:
       - name: Code Security Analysis
         run: pip3 install semgrep && semgrep --config "p/ci" --error
         shell: bash
-   dynamic_security_testing:
+  dynamic_security_testing:
     runs-on: ubuntu-latest
     name: Scan live web app for security flaws
     steps:
